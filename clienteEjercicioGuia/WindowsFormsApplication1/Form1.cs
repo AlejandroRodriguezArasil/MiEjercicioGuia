@@ -32,7 +32,7 @@ namespace WindowsFormsApplication1
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc, 9050);
+            IPEndPoint ipep = new IPEndPoint(direc, 9100);
 
 
             //Creamos el socket 
@@ -57,7 +57,7 @@ namespace WindowsFormsApplication1
                     mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
                     MessageBox.Show("La longitud de tu nombre es: " + mensaje);
                 }
-                else
+                else if (Bonito.Checked)
                 {
                     // Quiere saber si el nombre es bonito
                     string mensaje = "2/" + nombre.Text;
@@ -77,6 +77,19 @@ namespace WindowsFormsApplication1
                         MessageBox.Show("Tu nombre NO es bonito. Lo siento.");
 
 
+                }
+                else
+                {
+                    //Enviamos nombre y altura
+                    string mensaje = "3/" + nombre.Text + "/" + alto.Text;
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+
+                    //Recibimos respuesta servidor
+                    byte[] msg2 = new byte[80];
+                    server.Receive(msg2);
+                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                    MessageBox.Show(mensaje);
                 }
              
                 // Se terminó el servicio. 
